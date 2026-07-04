@@ -17,6 +17,7 @@ dependencies = [
     "litellm",
     "openai",
     "python-dotenv>=1.2.2",
+    "anthropic>=0.116.0",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
