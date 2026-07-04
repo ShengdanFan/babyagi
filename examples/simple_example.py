@@ -3,8 +3,8 @@
 import babyagi
 import os
 
-# Add DeepSeek key to enable automated descriptions and embedding of functions.
-babyagi.add_key_wrapper('deepseek_api_key',os.environ['DEEPSEEK_API_KEY'])
+# Add API key to enable automated descriptions and embedding of functions.
+babyagi.add_key_wrapper('openai_api_key', os.environ['DEEPSEEK_API_KEY'])
 
 @babyagi.register_function()
 def world():
@@ -16,8 +16,6 @@ def hello_world():
     return f"Hello {x}!"
 
 print(hello_world())
-
-app = babyagi.create_app('/dashboard')
 
 @app.route('/')
 def home():

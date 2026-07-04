@@ -3,34 +3,21 @@
 from functionz.core.framework import func
 
 @func.register_function(
-    metadata={"description": "DeepSeek Call function using Anthropic SDK (DeepSeek Anthropic-compatible endpoint)"},
-    imports=["anthropic"],
-    key_dependencies=["deepseek_api_key"]
+    metadata={"description": "GPT Call function using LiteLLm"},
+    imports=["litellm"],
+    key_dependencies=["openai_api_key"]
 )
-def deepseek_call(prompt: str) -> str:
+def gpt_call(prompt: str) -> str:
+    from litellm import completion
     import os
-    from anthropic import Anthropic
-    api_key = os.getenv('DEEPSEEK_API_KEY') or deepseek_api_key
-    client = Anthropic(
-        api_key=api_key,
-        base_url="https://api.deepseek.com/anthropic"
-    )
-    message = client.messages.create(
-        model="deepseek-v4-flash",
-        max_tokens=4096,
-        messages=[{"role": "user", "content": prompt}]
-    )
-    # Handle both TextBlock and ThinkingBlock responses
-    for block in message.content:
-        if hasattr(block, 'text'):
-            return block.text
-        elif hasattr(block, 'thinking'):
-            continue  # skip thinking blocks
-    return str(message.content[0])
+    os.environ['DEEPSEEK_API_KEY'] = os.getenv('DEEPSEEK_API_KEY')
+    messages = [{"role": "user", "content": prompt}]
+    response = completion(model="deepseek/deepseek-v4-flash", messages=messages)
+    return response['choices'][0]['message']['content']
 
 @func.register_function(
     metadata={"description": "Generates a description for a function using LiteLLm"},
-    dependencies=["deepseek_call"]
+    dependencies=["gpt_call"]
 )
 def description_writer(function_code: str) -> str:
     prompt = (
@@ -38,7 +25,7 @@ def description_writer(function_code: str) -> str:
         f"{function_code}\n\n"
         f"Description:"
     )
-    description = func.deepseek_call(prompt)
+    description = func.gpt_call(prompt)
     return description
 
 @func.register_function(
@@ -264,7 +251,7 @@ def generate_missing_embeddings() -> None:
 
 @func.register_function(
     metadata={"description": "Chooses a function to use"},
-    dependencies=["get_all_functions","deepseek_call"]
+    dependencies=["get_all_functions","gpt_call"]
 )
 def choose_function(prompt: str) -> str:
     functions = func.get_all_functions()
@@ -273,5 +260,5 @@ def choose_function(prompt: str) -> str:
         f"{prompt}\n\n"
         f"Functions:{functions}"
     )
-    choice = func.deepseek_call(prompt)
+    choice = func.gpt_call(prompt)
     return {"functions":functions,"choice":choice}
