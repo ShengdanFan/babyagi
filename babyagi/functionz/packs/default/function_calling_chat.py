@@ -7,7 +7,7 @@ import os
     metadata={
         "description": "A chat application that interacts with LiteLLM and executes selected functions from the database."
     },
-    imports=["litellm", "json"],
+    imports=["litellm", "json", "os"],
     dependencies=["get_function_wrapper", "execute_function_wrapper"],
     key_dependencies=["openai_api_key"]
 )
