@@ -5,12 +5,12 @@ import json
 
 @func.register_function(
     metadata={"description": "Generates queries based on user description"},
-    dependencies=["gpt_call"],
+    dependencies=["deepseek_call"],
     imports=["json"]
 )
 def generate_queries(user_description, X=3, max_retries=3):
     """
-    Generates X distinct queries that require action based on the user description using gpt_call. 
+    Generates X distinct queries that require action based on the user description using deepseek_call. 
 
     Args:
         user_description (str): Description of the user or their needs.
@@ -43,7 +43,7 @@ Ensure the queries are diverse, relevant to the user description, and represent 
     errors = []  # To collect error messages from each attempt
 
     for attempt in range(1, max_retries + 1):
-        response = gpt_call(prompt)
+        response = deepseek_call(prompt)
         try:
             queries = json.loads(response)
             if isinstance(queries, list) and len(queries) == X and all(isinstance(q, str) for q in queries):

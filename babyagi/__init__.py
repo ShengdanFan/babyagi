@@ -1,5 +1,8 @@
 # babyagi/__init__.py
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, g
 from .functionz.core.framework import Functionz
 from .dashboard import create_dashboard

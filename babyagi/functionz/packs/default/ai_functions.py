@@ -3,19 +3,26 @@
 from functionz.core.framework import func
 
 @func.register_function(
-    metadata={"description": "GPT Call function using LiteLLm"},
+    metadata={"description": "DeepSeek Call function using LiteLLm (Anthropic-compatible endpoint)"},
     imports=["litellm"],
-    key_dependencies=["openai_api_key"]
+    key_dependencies=["deepseek_api_key"]
 )
-def gpt_call(prompt: str) -> str:
+def deepseek_call(prompt: str) -> str:
+    import os
     from litellm import completion
+    env_key = os.getenv('DEEPSEEK_API_KEY') or deepseek_api_key
+    os.environ["ANTHROPIC_API_KEY"] = env_key
     messages = [{"role": "user", "content": prompt}]
-    response = completion(model="gpt-4o", messages=messages)
+    response = completion(
+        model="anthropic/deepseek-v4-flash",
+        messages=messages,
+        api_base="https://api.deepseek.com/anthropic"
+    )
     return response['choices'][0]['message']['content']
 
 @func.register_function(
     metadata={"description": "Generates a description for a function using LiteLLm"},
-    dependencies=["gpt_call"]
+    dependencies=["deepseek_call"]
 )
 def description_writer(function_code: str) -> str:
     prompt = (
@@ -23,7 +30,7 @@ def description_writer(function_code: str) -> str:
         f"{function_code}\n\n"
         f"Description:"
     )
-    description = func.gpt_call(prompt)
+    description = func.deepseek_call(prompt)
     return description
 
 @func.register_function(
@@ -88,7 +95,7 @@ def embed_input(input_text: str, model: str = "text-embedding-ada-002",
     import os
 
     # Set OpenAI API Key from environment variables
-    os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+    os.environ['OPENAI_API_KEY'] = os.getenv('DEEPSEEK_API_KEY')
 
     # Prepare the embedding request with optional parameters
     embedding_params = {
@@ -249,7 +256,7 @@ def generate_missing_embeddings() -> None:
 
 @func.register_function(
     metadata={"description": "Chooses a function to use"},
-    dependencies=["get_all_functions","gpt_call"]
+    dependencies=["get_all_functions","deepseek_call"]
 )
 def choose_function(prompt: str) -> str:
     functions = func.get_all_functions()
@@ -258,5 +265,5 @@ def choose_function(prompt: str) -> str:
         f"{prompt}\n\n"
         f"Functions:{functions}"
     )
-    choice = func.gpt_call(prompt)
+    choice = func.deepseek_call(prompt)
     return {"functions":functions,"choice":choice}

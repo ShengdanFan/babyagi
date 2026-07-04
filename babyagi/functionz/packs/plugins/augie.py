@@ -2,7 +2,7 @@ from babyagi.functionz.core.framework import func
 
 @func.register_function(
   metadata={"description": "Generate parameters for Augie creation using GPT."},
-  dependencies=["gpt_call"]
+  dependencies=["deepseek_call"]
 )
 def generate_augie_params(user_input, voice_id="29vD33N1CtxCmqQRPOHJ"):
   """
@@ -27,10 +27,10 @@ def generate_augie_params(user_input, voice_id="29vD33N1CtxCmqQRPOHJ"):
       "Do not generate a voice ID, use the one provided by the API system."
   )
 
-  gpt_output = gpt_call({"prompt": prompt, "user_input": user_input})
+  gpt_output = deepseek_call({"prompt": prompt, "user_input": user_input})
 
   # Parse GPT output and construct parameters
-  params = gpt_output['text']  # Assuming gpt_call returns a structured response.
+  params = gpt_output['text']  # Assuming deepseek_call returns a structured response.
   params['voice_id'] = voice_id  # Set the default voice ID.
 
   return params
