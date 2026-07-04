@@ -186,6 +186,7 @@ dependencies = [
     { name = "flask" },
     { name = "litellm" },
     { name = "openai" },
+    { name = "python-dotenv" },
     { name = "scikit-learn" },
     { name = "sqlalchemy" },
 ]
@@ -196,6 +197,7 @@ requires-dist = [
     { name = "flask", specifier = ">=2.0.0" },
     { name = "litellm" },
     { name = "openai" },
+    { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "scikit-learn" },
     { name = "sqlalchemy", specifier = ">=1.4,<2.0" },
 ]

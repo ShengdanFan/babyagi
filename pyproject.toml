@@ -16,6 +16,7 @@ dependencies = [
     "scikit-learn",
     "litellm",
     "openai",
+    "python-dotenv>=1.2.2",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
