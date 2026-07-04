@@ -4,8 +4,9 @@ import os
 
 app = babyagi.create_app('/dashboard')
 
-# Add DeepSeek key to enable automated descriptions and embedding of functions.
-babyagi.add_key_wrapper('deepseek_api_key',os.environ['DEEPSEEK_API_KEY'])
+# Add API keys to functionz key store
+babyagi.add_key_wrapper('deepseek_api_key', os.environ['DEEPSEEK_API_KEY'])
+babyagi.add_key_wrapper('OPENAI_API_KEY', os.environ['OPENAI_API_KEY'])
 
 
 @app.route('/')

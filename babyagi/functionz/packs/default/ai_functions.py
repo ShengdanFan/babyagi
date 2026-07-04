@@ -3,20 +3,21 @@
 from functionz.core.framework import func
 
 @func.register_function(
-    metadata={"description": "DeepSeek Call function using LiteLLm (Anthropic-compatible endpoint)"},
+    metadata={"description": "DeepSeek Call function using LiteLLm"},
     imports=["litellm"],
     key_dependencies=["deepseek_api_key"]
 )
 def deepseek_call(prompt: str) -> str:
     import os
     from litellm import completion
-    env_key = os.getenv('DEEPSEEK_API_KEY') or deepseek_api_key
-    os.environ["ANTHROPIC_API_KEY"] = env_key
+    api_key = os.getenv('DEEPSEEK_API_KEY') or deepseek_api_key
+    os.environ["OPENAI_API_KEY"] = api_key
+    os.environ["ANTHROPIC_API_KEY"] = api_key
     messages = [{"role": "user", "content": prompt}]
     response = completion(
-        model="anthropic/deepseek-v4-flash",
+        model="openai/deepseek-v4-flash",
         messages=messages,
-        api_base="https://api.deepseek.com/anthropic"
+        api_base="https://api.deepseek.com/v1"
     )
     return response['choices'][0]['message']['content']
 
