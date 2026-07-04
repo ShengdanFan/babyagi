@@ -162,3 +162,5 @@ cython_debug/
 # Custom ignores
 funztionz.db
 encryption_key.json
+.claude/
+.idea/
