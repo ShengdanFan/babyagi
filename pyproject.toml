@@ -1,26 +1,46 @@
-[tool.poetry]
+[project]
 name = "babyagi"
-version = "0.0.8"
-description = ""
-authors = ["Your Name <you@example.com>"]
+version = "0.1.2"
+description = "An experimental prototype framework for building self building autonomous agents."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Yohei Nakajima", email = "babyagi@untapped.vc"},
+]
+keywords = ["AGI", "AI", "Framework", "Baby AGI"]
+requires-python = ">=3.11"
+dependencies = [
+    "Flask>=2.0.0",
+    "sqlalchemy>=1.4,<2.0",
+    "cryptography",
+    "scikit-learn",
+    "litellm",
+    "openai",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10.0,<3.12"
-db = "^0.1.1"
-flask = "^3.0.3"
-werkzeug = "^3.0.4"
-setuptools = "^75.1.0"
+[project.urls]
+Author = "https://x.com/yoheinakajima"
+Repository = "https://github.com/yoheinakajima/babyagi"
+
+[project.scripts]
+babyagi = "babyagi.main:main"
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["babyagi*"]
 
 [tool.pyright]
-# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 useLibraryCodeForTypes = true
 exclude = [".cache"]
 
 [tool.ruff]
-# https://beta.ruff.rs/docs/configuration/
-select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
-ignore = ['W291', 'W292', 'W293']
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+select = ["E", "W", "F", "I", "B", "C4", "ARG", "SIM"]
+ignore = ["W291", "W292", "W293"]
